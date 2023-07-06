@@ -1,8 +1,8 @@
 {
     "algo_name": "vae_embedding",
     "experiment": {
-        "name": "weighting",
-        "validate": true,
+        "name": "Embedder_VAE_square_image",
+        "validate": false,
         "logging": {
             "terminal_output_to_txt": true,
             "log_tb": true
@@ -35,7 +35,7 @@
     },
     "train": {
         "data": null,
-        "output_dir": "/iris/u/maxjdu/Repos/BehaviorRetrieval/bc_trained_models",
+        "output_dir": null,
         "num_data_workers": 4,
         "hdf5_cache_mode": "low_dim",
         "hdf5_use_swmr": true,
@@ -47,20 +47,21 @@
             "rewards",
             "dones"
         ],
-        "mode": "classifier",
-        "actions": true,
-        "radius": null,
         "goal_mode": null,
         "cuda": true,
         "batch_size": 50,
         "num_epochs": 2000,
         "seed": 1,
-        "p" : 0.1
+        "radius": null,
+        "actions": true,
+        "mode": "classifier",
+        "same_traj": null,
+        "p": 0.1
     },
     "algo": {
-        "action_size" : 7,
-        "l2" : 0,
+        "l2": 0,
         "embedding_size": 64,
+        "action_size": 7,
         "split_trunk_at": 0,
         "optim_params": {
             "VAE": {
@@ -73,7 +74,7 @@
                     "L2": 0.0
                 }
             },
-           "future": {
+            "future": {
                 "learning_rate": {
                     "initial": 0.001,
                     "decay_factor": 0,
@@ -82,6 +83,18 @@
                 "regularization": {
                     "L2": 0.0
                 }
+            }
+        },
+        "pretrained_weights": {
+            "obs": {
+                "agentview_image": null,
+                "robot0_eye_in_hand_image": null
+            }
+        },
+        "lock_encoder": {
+            "obs": {
+                "agentview_image": false,
+                "robot0_eye_in_hand_image": false
             }
         },
         "actor_layer_dims": [
@@ -157,7 +170,9 @@
         "modalities": {
             "obs": {
                 "low_dim": [],
-                "rgb": ["agentview_image"],
+                "rgb": [
+                    "agentview_image"
+                ],
                 "depth": [],
                 "scan": []
             },
