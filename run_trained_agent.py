@@ -52,6 +52,7 @@ Example usage:
         --n_rollouts 50 --horizon 400 --seed 0 \
         --dataset_path /path/to/output.hdf5
 """
+import os
 import argparse
 import json
 import h5py
@@ -76,6 +77,18 @@ from robomimic.algo import RolloutPolicy
 from robomimic.config import config_factory
 
 import MachinePolicy
+
+class VideoWriter:
+    def __init__(self, path, fps):
+        self.path = path
+        self.fps = fps
+        self.video_imgs = []
+    
+    def append_data(self, img):
+        self.video_imgs.append(img)
+
+    def save(self):
+        imageio.mimsave(self.path, self.video_imgs, duration=1000 // self.fps)
 
 def rollout(policy, env, horizon, render=False, video_writer=None, video_skip=5, return_obs=False, camera_names=None,
             machine_policy = False, real_robot = False, goal = None):
@@ -227,7 +240,16 @@ def run_trained_agent(args):
     device = TorchUtils.get_torch_device(try_to_use_cuda=True)
 
     if not args.machine_oracle:
-        policy, ckpt_dict = FileUtils.policy_from_checkpoint(ckpt_path=ckpt_path, device=device, verbose=True)
+        ckpt_dict = None
+        if args.config is not None:
+            ckpt_dict = FileUtils.maybe_dict_from_checkpoint(ckpt_path=ckpt_path)
+            ext_cfg = json.load(open(args.config, 'r'))
+            config = config_factory(ext_cfg["algo_name"])
+            with config.values_unlocked():
+                config.update(ext_cfg)
+            ckpt_dict["config"] = config.dump()
+
+        policy, ckpt_dict = FileUtils.policy_from_checkpoint(ckpt_path=ckpt_path, ckpt_dict=ckpt_dict, device=device, verbose=True)
         # create environment from saved checkpoint
         try: #hacky solution
             del ckpt_dict["env_metadata"]["env_kwargs"]["use_image_obs"]
@@ -305,7 +327,8 @@ def run_trained_agent(args):
             policy.set_nonsense(nonsense)
         video_writer = None
         if write_video and i % args.eval_skip == 0:
-            video_writer = imageio.get_writer(args.eval_path + f"/eval{i}.gif", fps=20)
+            video_writer = VideoWriter(args.eval_path + f"/eval{i}.gif", fps=20)
+            # video_writer = imageio.get_writer(args.eval_path + f"/eval{i}.gif", fps=20)
         print(f"Step {i} / {rollout_num_episodes}. Time taken: {int((time.time() - start) / 60)} mins")
         stats, traj = rollout(
             policy=policy,
@@ -321,7 +344,8 @@ def run_trained_agent(args):
             goal = expert_data.get_goal() if expert_data is not None else None #provide a goal if needed
         )
         if write_video and i % args.eval_skip == 0:
-            video_writer.close()
+            video_writer.save()
+            # video_writer.close()
         rollout_stats.append(stats)
         if args.success_only and stats["Success_Rate"] < 1 and not nonsense:
             # don't save failures
@@ -357,9 +381,13 @@ def run_trained_agent(args):
     print("Average Rollout Stats")
     try:
         # save to csv so we can extract numbers
-        log_file = args.agent[ : args.agent.find("model_epoch") - 1]
-        with open(f"{log_file}/success_rate_{args.checkpoint}.txt", "w") as f:
-            f.write(str(avg_rollout_stats["Success_Rate"]))
+        log_file = args.agent[ : args.agent.find("model_") - 1]
+        if os.path.exists(f"{log_file}/success_rate_{args.checkpoint}.txt"):
+            with open(f"{log_file}/success_rate_{args.checkpoint}.txt", "a") as f:
+                f.write(str(avg_rollout_stats["Success_Rate"]) + '\n')
+        else:
+            with open(f"{log_file}/success_rate_{args.checkpoint}.txt", "w") as f:
+                f.write(str(avg_rollout_stats["Success_Rate"]) + '\n')
     except:
         print(str(avg_rollout_stats["Success_Rate"])) # just in case, we always get the number output 
 
