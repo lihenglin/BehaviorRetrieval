@@ -326,7 +326,7 @@ class SquareAssemblyPolicy(MachinePolicy):
                     self.target_ypr[2] = self.closest_axis(self.target_ypr[2])
                 else:
                     mean_target_xyz = [0.23, -0.1, 1.05]
-                    target_xyz = np.random.default_rng().normal(loc=mean_target_xyz, scale=[0.001, 0.001, 0.01],                                          size=(3,))
+                    target_xyz = np.random.default_rng().normal(loc=mean_target_xyz, scale=[0.001, 0.001, 0.01], size=(3,))
                     self.target_xyz = np.clip(target_xyz, [0.225, -0.095, 1.03], [0.235, -0.105, 1.07])
 
 

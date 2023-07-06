@@ -13,7 +13,7 @@ This repository contains the code for BehaviorRetrieval, a few-shot imitation le
 Find all the configurations for training in `configs/`. We follow the Robomimic convention of keeping hyperparameters in the `.json` files. We have special `office` configuraitons for the Office task due to differences of the Roboverse environment. 
 ## Collecting Data
 * Can task: use the `paired` data provided by Robomimic: [download](http://downloads.cs.stanford.edu/downloads/rt_benchmark/can/paired/image.hdf5)
-* Square task: use the MachinePolicy to collect demonstrations. Read the script in `run_trained_agent.sh` for more information
+* Square task: use the MachinePolicy to collect demonstrations. Read the script in `collect_data.sh` for more information
 * Office task: use the `scripted_collect.sh` in the `roboverse/scripts` folder. Use `utils/roboverse_to_robomimic.py` to convert the demo format to the one used by our codebase
 
 ## Training The Embedder
