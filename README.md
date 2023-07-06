@@ -22,7 +22,7 @@ Use `train_embedder.py`, which can handle contrastive and VAE embeders. For conf
 ## Running BehaviorRetrieval
 NOTE: The network sizes and some hyperparameters (e.g. number of epochs, batch size) are different for BC and goal-conditioned BC. Why is that?
 
-Use `run_weighted_BC.py`, which runs BehaviorRetieval and our baselines. For example configs, see `run_weighted_BC.sh`
+Use `run_weighted_BC.py`, which runs BehaviorRetieval and our baselines. For example configs, see `run_weighted_BC.sh` or `run_weighted_BC_slurm.sh`
 
 To train with vanilla BC, use `train.py`. We use this to pretrain the model for the HG-DAGGER experiments. See example config in `train.sh`. 
 
