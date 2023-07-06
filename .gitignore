@@ -4,6 +4,9 @@ unused_runs/
 tb/
 datasets/
 expert_models/
+bc_trained_models/
+__pycache__/
+slurm_logs/
 events.out*
 .idea
 *.gif
