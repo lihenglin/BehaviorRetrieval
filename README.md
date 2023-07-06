@@ -29,7 +29,7 @@ To train with vanilla BC, use `train.py`. We use this to pretrain the model for 
 To run HG-DAGGER with BehaviorRetrieval, use `run_weighted_corrections.py`. See `run_weighted_corrections.sh` for an example config. 
 
 ## Evaluating BehaviorRetrieval and Baselines
-Use `run_trained_agent.py` to run evals. See `run_trained_agent.sh` for configs. 
+Use `run_trained_agent.py` to run evals. See `eval_trained_agent.sh` for configs. 
 
 ## Real Robot Experiments
 If the robot interfaces with the Gym environment, this codebase works with real robots out of the box.  
