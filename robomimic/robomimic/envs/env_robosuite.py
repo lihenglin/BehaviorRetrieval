@@ -173,7 +173,8 @@ class EnvRobosuite(EB.EnvBase):
 
     # use this to get any sort of information that you need to get a demostration working
     def get_priv_info(self):
-        return self.env.get_priv_info()
+        return None 
+        # return self.env.get_priv_info() # NOTE: MachinePolicy is not using this anyway
 
     def get_observation(self, di=None):
         """
