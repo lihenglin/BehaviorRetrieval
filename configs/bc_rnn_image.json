@@ -1,7 +1,7 @@
 {
     "algo_name": "bc",
     "experiment": {
-        "name": "bc_can_longer",
+        "name": null,
         "validate": false,
         "logging": {
             "terminal_output_to_txt": true,
@@ -35,7 +35,7 @@
     },
     "train": {
         "data": null,
-        "output_dir": "/iris/u/maxjdu/Repos/BehaviorRetrieval/bc_trained_models",
+        "output_dir": null,
         "num_data_workers": 2,
         "hdf5_cache_mode": "low_dim",
         "hdf5_use_swmr": true,

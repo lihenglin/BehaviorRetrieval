@@ -1,5 +1,5 @@
 {
-    "algo_name": "bc",
+    "algo_name": "lmp",
     "experiment": {
         "name": null,
         "validate": false,
@@ -16,7 +16,7 @@
             "on_best_rollout_return": false,
             "on_best_rollout_success_rate": true
         },
-        "epoch_every_n_steps": 100,
+        "epoch_every_n_steps": 500,
         "validation_epoch_every_n_steps": 100,
         "env": null,
         "additional_envs": null,
@@ -28,7 +28,7 @@
             "enabled": true,
             "n": 10,
             "horizon": 400,
-            "rate": 200,
+            "rate": 50,
             "warmstart": 0,
             "terminate_on_success": true
         }
@@ -36,7 +36,7 @@
     "train": {
         "data": null,
         "output_dir": null,
-        "num_data_workers": 0,
+        "num_data_workers": 2,
         "hdf5_cache_mode": "low_dim",
         "hdf5_use_swmr": true,
         "hdf5_normalize_obs": false,
@@ -47,9 +47,9 @@
             "rewards",
             "dones"
         ],
-        "goal_mode": null,
+        "goal_mode": "last",
         "cuda": true,
-        "batch_size": 100,
+        "batch_size": 16,
         "num_epochs": 10000,
         "seed": 1
     },
@@ -71,8 +71,6 @@
             "l1_weight": 0.0,
             "cos_weight": 0.0
         },
-        "actor_layer_dims": [
-        ],
         "gaussian": {
             "enabled": false,
             "fixed_std": false,
@@ -126,7 +124,7 @@
         "rnn": {
             "enabled": true,
             "horizon": 10,
-            "hidden_dim": 400,
+            "hidden_dim": 1000,
             "rnn_type": "LSTM",
             "num_layers": 2,
             "open_loop": false,
@@ -149,7 +147,12 @@
                 "scan": []
             },
             "goal": {
-                "low_dim": [],
+                "low_dim": [
+                    "robot0_eef_pos",
+                    "robot0_eef_quat",
+                    "robot0_gripper_qpos",
+                    "object"
+                ],
                 "rgb": [],
                 "depth": [],
                 "scan": []
@@ -181,7 +184,7 @@
                         "output_variance": false
                     }
                 },
-                "obs_randomizer_class": null,
+                "obs_randomizer_class": "CropRandomizer",
                 "obs_randomizer_kwargs": {
                     "crop_height": 76,
                     "crop_width": 76,
